@@ -1,0 +1,6 @@
+
+	if (philo->num_philo == 1)
+	{
+		print_state(philo, "died");
+		return 0;
+	}

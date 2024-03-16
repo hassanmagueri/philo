@@ -26,20 +26,20 @@ typedef struct s_monitor t_monitor;
 
 typedef struct s_philo
 {
-	int	id;
-	int 				num_philo;
-    int 				time_to_die;
-    int 				time_to_eat;
-    int 				time_to_sleep;
-    int 				num_of_meals;
-	int					is_ate;
-	int	is_dead;
+	int				id;
+	int 			num_philo;
+    int 			time_to_die;
+    int 			time_to_eat;
+    int 			time_to_sleep;
+    int 			num_of_meals;
+	int				is_ate;
+	int				is_dead;
+	int				is_ready;
 	size_t			last_meal;
-	t_fork			*l_fork;
-	t_fork			*r_fork;
 	t_state			state;
 	pthread_mutex_t	*forks_mt;
-	pthread_t			thread_id;
+	pthread_t		thread_id;
+	size_t			delay;
 	t_monitor		*monitor;
 } t_philo;
 
@@ -48,6 +48,7 @@ struct s_monitor
 	pthread_t		thread_id;
 	int 			num_philo;
     int 			time_to_die;
+	int				philo_ready;
     int 			time_to_eat;
     int 			time_to_sleep;
     int 			num_of_meals;
@@ -56,22 +57,28 @@ struct s_monitor
 	t_philo			*philos;
 	t_fork			*forks;
 	size_t			time_start;
-	pthread_mutex_t	threads_ready_mutex;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	mutex_philo_ready;
+	pthread_mutex_t	mutex_dead_flag;
+	pthread_mutex_t	mutex_printf;
+	pthread_mutex_t	mutex_is_ate;
 	pthread_mutex_t	*forks_mt;
-	pthread_mutex_t	time_start_mutex;
-	pthread_mutex_t	mutex_pid;
-	pthread_mutex_t	printf_mutex;
-	pthread_mutex_t	is_ate_mutex;
 };
 
 
-int	ft_atoi(const char	*str);
-int ft_usleep(size_t millisecond);
-int    ft_eat(t_philo *philo);
-void    ft_philo_sleep(t_philo *philo);
+int		ft_atoi(const char	*str);
+int		ft_usleep(size_t millisecond);
+int		ft_eat(t_philo *philo);
+int		ft_philo_sleep(t_philo *philo);
 size_t	get_current_time(void);
-void    ft_philo_think(t_philo *philo);
+int		ft_philo_think(t_philo *philo);
 
-void *ft_routine(void *args);
-int	print_state(t_philo *philo, char *str);
+void	*ft_routine(void *args);
+int		print_state(t_philo *philo, char *str);
+
+void    philo_init(t_philo *philo, int id, t_monitor *monitor);
+int		destroy_free_all(t_monitor *monitor);
+int		destroy_mutex(t_monitor *monitor, int i);
+int 	init_mutex(t_monitor *monitor);
+int    	monitor_init(t_monitor *monitor, int argc, char const *argv[]);
+void	*ft_monitor(void *args);

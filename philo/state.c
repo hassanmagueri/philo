@@ -1,24 +1,5 @@
 #include "philo.h"
 
-
-int	print_state(t_philo *philo, char *str)
-{
-	t_monitor *monitor;
-
-	monitor = philo->monitor;
-	pthread_mutex_lock(&monitor->mutex_dead_flag);
-	if (philo->monitor->dead_flag == 1)
-	{
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
-		return (-1);
-	}
-	pthread_mutex_unlock(&monitor->mutex_dead_flag);
-	pthread_mutex_lock(&monitor->mutex_printf);
-	printf("%zu %d %s\n", get_current_time() - philo->monitor->time_start, philo->id, str);
-	pthread_mutex_unlock(&monitor->mutex_printf);
-	return (1);
-}
-
 int	ft_philo_dead(t_philo *philo)
 {
 	t_monitor *monitor;
@@ -39,6 +20,23 @@ int	ft_philo_dead(t_philo *philo)
 		return (1);
 	}
 	return (0);
+}
+int	print_state(t_philo *philo, char *str)
+{
+	t_monitor *monitor;
+
+	monitor = philo->monitor;
+	pthread_mutex_lock(&monitor->mutex_dead_flag);
+	if (philo->monitor->dead_flag == 1)
+	{
+		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		return (-1);
+	}
+	pthread_mutex_unlock(&monitor->mutex_dead_flag);
+	pthread_mutex_lock(&monitor->mutex_printf);
+	printf("%zu %d %s\n", get_current_time() - philo->monitor->time_start, philo->id, str);
+	pthread_mutex_unlock(&monitor->mutex_printf);
+	return (1);
 }
 
 int handle_one_philo(t_philo *philo)
@@ -61,6 +59,8 @@ int    ft_eat(t_philo *philo)
 	monitor = philo->monitor;
 	if (philo->num_philo == 1)
 		return (handle_one_philo(philo));
+	if (ft_philo_dead(philo))
+		return (0);
 	pthread_mutex_lock(&monitor->forks_mt[r_fork]);
 	philo->state = TAKE_ONE_FORK;
 	if (print_state(philo, "has taken a fork") == -1)

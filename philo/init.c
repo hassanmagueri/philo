@@ -26,11 +26,11 @@ int destroy_mutex(t_monitor *monitor, int i)
 {
 	if (i == -1)
 		i = monitor->num_philo;
-	free(monitor->forks_mt);
 	free(monitor->philos);
 	pthread_mutex_destroy(&monitor->mutex);
 	while (i--)
 		pthread_mutex_destroy(&monitor->forks_mt[i]);
+	free(monitor->forks_mt);
 	return 0;
 }
 

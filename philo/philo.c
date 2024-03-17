@@ -6,15 +6,13 @@ int destroy_free_all(t_monitor *monitor)
 	int i;
 	pthread_mutex_t *mt;
 
-	// i = monitor->num_philo;
 	i = 0;
-	free(monitor->forks_mt);
-	free(monitor->philos);
 	pthread_mutex_destroy(&monitor->mutex);
 	mt = &monitor->forks_mt[0];
-	pthread_mutex_destroy(mt);
-	// while (i < monitor->num_philo)
-	// 	pthread_mutex_destroy(&monitor->forks_mt[i++]);
+	while (i < monitor->num_philo)
+		pthread_mutex_destroy(&monitor->forks_mt[i++]);
+	free(monitor->forks_mt);
+	free(monitor->philos);
 	return 0;
 }
 
@@ -97,7 +95,6 @@ int main(int argc, char const *argv[])
 		return print_error();
 	if (monitor_init(&monitor, argc, argv) == 0)
 		return (1);
-	// exit()
 	i = 0;
 	philos = monitor.philos;
 	while (i < monitor.num_philo)

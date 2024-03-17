@@ -32,7 +32,6 @@ int	monitor_loop(t_monitor *monitor)
 	t_philo *philo;
 	int		i;
 
-	// pthread_mutex_lock(&monitor->mutex);
 	i = 0;
 	while (i < monitor->num_philo)
 	{
@@ -43,22 +42,21 @@ int	monitor_loop(t_monitor *monitor)
 			monitor->dead_flag = 1;
 			set_all_philos_dead(monitor->philos, monitor->num_philo);
 			pthread_mutex_unlock(&monitor->mutex_dead_flag);
+			usleep(500); // to stop make other mutex run before
 			pthread_mutex_lock(&monitor->mutex_printf);
 			printf("%zu %d died\n", get_current_time() - philo->monitor->time_start , philo->id);
 			pthread_mutex_unlock(&monitor->mutex_printf);
-			return 0;
+			return (0);
 		}
 		else if (check_all_philos_ate(monitor->philos, monitor->num_philo))
 		{
 			set_all_philos_dead(monitor->philos, monitor->num_philo);
 			pthread_mutex_unlock(&monitor->mutex_dead_flag);
-			// pthread_mutex_unlock(&monitor->mutex);
-			return 0;
+			return (0);
 		}
 		pthread_mutex_unlock(&monitor->mutex_dead_flag);
 		i++;
 	}
-	// pthread_mutex_unlock(&monitor->mutex);
 	return 1;
 }
 

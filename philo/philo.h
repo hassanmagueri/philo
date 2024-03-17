@@ -82,3 +82,4 @@ int		destroy_mutex(t_monitor *monitor, int i);
 int 	init_mutex(t_monitor *monitor);
 int    	monitor_init(t_monitor *monitor, int argc, char const *argv[]);
 void	*ft_monitor(void *args);
+int print_error(void);

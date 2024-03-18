@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:48:01 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/16 03:02:07 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/18 00:39:06 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	ft_atoi(const char	*str)
 {
 	long long	num;
-	int					sign;
-	int					i;
+	int			sign;
+	int			i;
 
 	i = 0;
 	num = 0;
@@ -30,6 +30,6 @@ int	ft_atoi(const char	*str)
 			return (-1);
 	}
 	if (str[i] != 0)
-		return -1;
+		return (-1);
 	return (num * sign);
 }

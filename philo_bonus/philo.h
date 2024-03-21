@@ -46,7 +46,7 @@ typedef struct s_philo
 	int				time_to_sleep;
 	int				num_of_meals;
 	int				is_ate;
-	int				is_dead;
+	// int				is_dead;
 	size_t			last_meal;
 	sem_t			**forks;
 	pthread_t		thread_id;
@@ -64,28 +64,28 @@ struct s_monitor
 	int				num_of_meals;
 	int				dead_flag;
 	int				threads_ready;
-	t_philo			*philos;
+	t_philo			philos[200];
 	size_t			time_start;
 	sem_t			*sem_philo_ready;
 	sem_t			*sem_dead_flag;
 	sem_t			*sem_printf;
-	sem_t			**forks;
+	sem_t			*forks[200];
 };
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+int		ft_strlen(const char *str);
 void	sem_end(sem_t *sem, char *name);
 int		ft_atoi(const char	*str);
 int		ft_usleep(size_t millisecond);
 int		ft_eat(t_philo *philo);
 int		ft_philo_sleep_think(t_philo *philo);
-int		destroy_free_all(t_monitor *monitor);
 int		destroy_semaphore(t_monitor *monitor, int i);
 int		init_sem(t_monitor *monitor);
 int		monitor_init(t_monitor *monitor, int argc, char const *argv[]);
 int		print_error(void);
-int		print_state(t_philo *philo, char *str);
-
-void	*ft_routine(t_philo *philo);
+int		destroy_all(t_monitor *monitor);
+void	ft_routine(t_philo *philo);
+void	print_state(t_philo *philo, char *str);
 void	philo_init(t_philo *philo, int id, t_monitor *monitor);
-void	*ft_monitor(void *args);
 size_t	get_current_time(void);
 
 #endif

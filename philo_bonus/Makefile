@@ -6,22 +6,23 @@
 #    By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/18 01:46:42 by emagueri          #+#    #+#              #
-#    Updated: 2024/03/20 15:41:51 by emagueri         ###   ########.fr        #
+#    Updated: 2024/03/21 14:44:55 by emagueri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC =	ft_atoi.c \
 		init.c \
-		main.c \
-		monitor.c \
 		philo.c \
 		state.c \
-		time.c
+		time.c \
+		ft_strlen.c \
+		ft_strlcpy.c \
+		main.c
 
 OBJ		= $(SRC:.c=.o)
 
 NAME	= philo
-CC		= cc -Wall -Werror -Wextra  #-fsanitize=thread -pthread
+CC		= cc #-Wall -Werror -Wextra #-fsanitize=thread
 RM		= rm -f
 
 bonus:$(NAME)

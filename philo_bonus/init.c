@@ -6,26 +6,39 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/20 13:58:20 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:07:43 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// int	destroy_free_all(t_monitor *monitor)
-// {
-// 	int	i;
+void	sem_end(sem_t *sem, char *name)
+{
+	sem_close(sem);
+	sem_unlink(name);
+}
 
-// 	i = 0;
-// 	pthread_mutex_destroy(&monitor->mutex_philo_ready);
-// 	pthread_mutex_destroy(&monitor->mutex_dead_flag);
-// 	pthread_mutex_destroy(&monitor->mutex_printf);
-// 	while (i < monitor->num_philo)
-// 		pthread_mutex_destroy(&monitor->forks[i++]);
-// 	free(monitor->forks);
-// 	free(monitor->philos);
-// 	return (0);
-// }
+int	destroy_all(t_monitor *monitor)
+{
+	int	i;
+	int index;
+
+	index = 0;
+	i = 0;
+	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
+	sem_end(monitor->sem_printf, "/sem_printf");
+	i = 0;
+	char name[5] = "aaaa";
+	while (i < 200)
+	{
+		sem_end(monitor->forks[i], name);
+		i++;
+		if (i % 50 == 0)
+			index++;
+		name[index]++;
+	}
+	return (0);
+}
 
 void	philo_init(t_philo *philo, int id, t_monitor *monitor)
 {
@@ -36,7 +49,6 @@ void	philo_init(t_philo *philo, int id, t_monitor *monitor)
 	philo->time_to_sleep = monitor->time_to_sleep;
 	philo->num_of_meals = monitor->num_of_meals;
 	philo->forks = monitor->forks;
-	philo->is_dead = 0;
 	philo->is_ate = 0;
 	philo->monitor = monitor;
 	philo->last_meal = get_current_time();
@@ -48,7 +60,6 @@ int	destroy_semaphore(t_monitor *monitor, int i)
 
 	if (i == -1)
 		i = monitor->num_philo;
-	sem_end(monitor->sem_philo_ready, "/sem_philo_ready");
 	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
 	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
 	while (i--)
@@ -56,42 +67,29 @@ int	destroy_semaphore(t_monitor *monitor, int i)
 		sem_name = strcat(sem_name, "-");
 		sem_end(monitor->forks[i], "/sem_");
 	}
-	free(monitor->forks);
 	return (0);
-}
-
-void	sem_end(sem_t *sem, char *name)
-{
-	sem_close(sem);
-	sem_unlink(name);
 }
 
 int	init_sem(t_monitor *monitor)
 {
 	int	i;
-	// char name[4];
-	i = 0;
-	sem_end(monitor->sem_philo_ready, "/sem_philo_ready");
+	char name[5];
+	int j;
+
 	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
 	sem_end(monitor->sem_printf, "/sem_print");
-	char name[] = "aaaa";
-	int j = 0;
 	i = 0;
-	monitor->forks = malloc(sizeof(sem_t *) * monitor->num_philo);
+	j = 0;
+	ft_strlcpy(name, "    ", 5);
 	while (i < 200)
 	{
 		sem_end(monitor->forks[i], name);
-		// sem_post(monitor->forks[i]);
 		i++;
-		if (i % 50)
+		if (i % 50 == 0)
 			j++;
 		name[j]++;
 	}
-	// sem_unlink("/sem_");
-	strcpy(name, "aaaa");
-	monitor->sem_philo_ready = sem_open("/sem_philo_ready", O_CREAT, 0644, 1);
-	if (monitor->sem_philo_ready == SEM_FAILED)
-		return (print_error(), 0);
+	ft_strlcpy(name, "    ", 5);
 	monitor->sem_dead_flag = sem_open("/sem_dead_flag", O_CREAT, 0644, 1);
 	if (monitor->sem_dead_flag == SEM_FAILED)
 		return (sem_end(monitor->sem_philo_ready, "/sem_philo_ready"), 0);
@@ -99,10 +97,6 @@ int	init_sem(t_monitor *monitor)
 	if (monitor->sem_printf == SEM_FAILED)
 		return (sem_end(monitor->sem_philo_ready, "/sem_philo_ready"), 
 			sem_end(monitor->sem_dead_flag, "/sem_dead_flag"), 0);
-	if (!monitor->forks)
-		return (destroy_semaphore(monitor, 0));
-	// bzero(name, 3);///  libft
-	// strcpy(name, "   ");
 	j = 0;
 	i = 0;
 	while (i < monitor->num_philo)
@@ -111,7 +105,7 @@ int	init_sem(t_monitor *monitor)
 		if (monitor->forks[i] == SEM_FAILED)
 			return (destroy_semaphore(monitor, i), 0);
 		i++;
-		if (i % 50)
+		if (i % 50 == 0)
 			j++;
 		name[j]++;
 	}
@@ -126,7 +120,6 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 	monitor->time_to_die = ft_atoi(argv[2]);
 	monitor->time_to_eat = ft_atoi(argv[3]);
 	monitor->time_to_sleep = ft_atoi(argv[4]);
-	monitor->philo_ready = 0;
 	monitor->dead_flag = 0;
 	monitor->num_of_meals = -2;
 	monitor->time_start = get_current_time();
@@ -140,10 +133,7 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 	if (init_sem(monitor) == 0)
 		return (0);
 	i = 0;
-	monitor->philos = malloc(sizeof(t_philo) * monitor->num_philo);
-	if (!monitor->philos)
-		return (destroy_semaphore(monitor, -1));
 	while (i++ < monitor->num_philo)
 		philo_init(&(monitor->philos[i - 1]), i, monitor);
-	return 1;
+	return (1);
 }

@@ -31,12 +31,6 @@
 typedef struct timeval		t_timeval;
 typedef struct s_monitor	t_monitor;
 
-typedef	struct s_sem
-{
-	sem_t	*sem;
-	char	*name;
-} t_sem;
-
 typedef struct s_philo
 {
 	int				id;
@@ -46,7 +40,6 @@ typedef struct s_philo
 	int				time_to_sleep;
 	int				num_of_meals;
 	int				is_ate;
-	// int				is_dead;
 	size_t			last_meal;
 	sem_t			**forks;
 	pthread_t		thread_id;
@@ -64,6 +57,7 @@ struct s_monitor
 	int				num_of_meals;
 	int				dead_flag;
 	int				threads_ready;
+	char			sem_name[6];
 	t_philo			philos[200];
 	size_t			time_start;
 	sem_t			*sem_philo_ready;

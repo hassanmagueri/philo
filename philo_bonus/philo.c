@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:02 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/21 15:21:35 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:57:21 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_sleep_if_even(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->time_to_eat);
+		ft_usleep(philo->time_to_eat / 2);
 }
 
 void	ft_routine(t_philo *philo)

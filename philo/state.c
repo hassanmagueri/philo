@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 17:52:48 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/23 15:26:48 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_philo_dead(t_philo *philo)
 	r_fork = philo->id % philo->num_philo;
 	l_fork = philo->id - 1;
 	monitor = philo->monitor;
-	if (get_current_time() - philo->last_meal >= time_die)
+	if (get_current_time() - philo->last_meal > time_die)
 	{
 		pthread_mutex_lock(&monitor->mutex_dead_flag);
 		monitor->dead_flag = 1;

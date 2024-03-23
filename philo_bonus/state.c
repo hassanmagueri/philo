@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 15:05:50 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:51:13 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ int	ft_philo_dead(t_philo *philo)
 	size_t		time_die;
 
 	time_die = (unsigned long)philo->time_to_die;
-	r_fork = philo->id % philo->num_philo;
-	l_fork = philo->id - 1;
+	r_fork = philo->id - 1;
+	l_fork = philo->id % philo->num_philo;
 	monitor = philo->monitor;
-	if (get_current_time() - philo->last_meal > time_die)
+	if (get_current_time() - philo->last_meal >= time_die)
 	{
 		sem_post(monitor->sem_dead_flag);
 		sem_wait(monitor->sem_printf);
@@ -51,7 +51,7 @@ int	ft_philo_dead(t_philo *philo)
 int	handle_one_philo(t_philo *philo)
 {
 	print_state(philo, "has taken a fork");
-	ft_usleep(philo->time_to_die);
+	ft_usleep(NULL, philo->time_to_die);
 	sem_wait(philo->monitor->sem_dead_flag);
 	sem_post(philo->monitor->sem_dead_flag);
 	print_state(philo, "died");
@@ -64,8 +64,8 @@ int	ft_eat(t_philo *philo)
 	int			right;
 	int			left;
 
-	right = philo->id % philo->num_philo;
-	left = philo->id - 1;
+	right = philo->id - 1;
+	left = philo->id % philo->num_philo;
 	monitor = philo->monitor;
 	if (philo->num_philo == 1)
 		return (handle_one_philo(philo));
@@ -80,7 +80,7 @@ int	ft_eat(t_philo *philo)
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
 	philo->last_meal = get_current_time();
-	ft_usleep(philo->time_to_eat);
+	ft_usleep(philo, philo->time_to_eat);
 	sem_post(monitor->forks[left]);
 	sem_post(monitor->forks[right]);
 	return (1);
@@ -89,7 +89,7 @@ int	ft_eat(t_philo *philo)
 int	ft_philo_sleep_think(t_philo *philo)
 {
 	print_state(philo, "is sleeping");
-	ft_usleep(philo->time_to_sleep);
+	ft_usleep(philo, philo->time_to_sleep);
 	print_state(philo, "is thinking");
 	return (1);
 }

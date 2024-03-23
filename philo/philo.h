@@ -59,7 +59,8 @@ struct s_monitor
 };
 
 int		ft_atoi(const char	*str);
-int		ft_usleep(size_t millisecond);
+int		ft_usleep(t_philo *philo, size_t millisecond);
+int		ft_philo_dead(t_philo *philo);
 int		ft_eat(t_philo *philo);
 int		ft_philo_sleep_think(t_philo *philo);
 int		destroy_free_all(t_monitor *monitor);

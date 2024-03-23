@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:02 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/18 01:09:45 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:43:24 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_philo_is_dead(t_philo *philo)
 void	ft_sleep_if_even(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->time_to_eat);
+		ft_usleep(philo, philo->time_to_eat / 2);
 }
 
 void	*ft_routine(void *args)

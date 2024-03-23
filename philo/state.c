@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/18 01:09:55 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:52:48 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_philo_dead(t_philo *philo)
 	r_fork = philo->id % philo->num_philo;
 	l_fork = philo->id - 1;
 	monitor = philo->monitor;
-	if (get_current_time() - philo->last_meal > time_die)
+	if (get_current_time() - philo->last_meal >= time_die)
 	{
 		pthread_mutex_lock(&monitor->mutex_dead_flag);
 		monitor->dead_flag = 1;
@@ -58,7 +58,7 @@ int	ft_philo_dead(t_philo *philo)
 int	handle_one_philo(t_philo *philo)
 {
 	print_state(philo, "has taken a fork");
-	ft_usleep(philo->time_to_die);
+	ft_usleep(NULL, philo->time_to_die);
 	pthread_mutex_lock(&philo->monitor->mutex_dead_flag);
 	philo->monitor->dead_flag = 1;
 	philo->is_dead = 1;
@@ -78,8 +78,6 @@ int	ft_eat(t_philo *philo)
 	monitor = philo->monitor;
 	if (philo->num_philo == 1)
 		return (handle_one_philo(philo));
-	if (ft_philo_dead(philo))
-		return (0);
 	pthread_mutex_lock(&monitor->forks[right]);
 	if (ft_philo_dead(philo))
 		return (0);
@@ -91,7 +89,8 @@ int	ft_eat(t_philo *philo)
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
 	philo->last_meal = get_current_time();
-	ft_usleep(philo->time_to_eat);
+	if (ft_usleep(philo, philo->time_to_eat))
+		return (0);
 	pthread_mutex_unlock(&monitor->forks[right]);
 	return (pthread_mutex_unlock(&monitor->forks[left]), 1);
 }
@@ -103,7 +102,8 @@ int	ft_philo_sleep_think(t_philo *philo)
 	res = print_state(philo, "is sleeping");
 	if (res == -1)
 		return (0);
-	ft_usleep(philo->time_to_sleep);
+	if (ft_usleep(philo, philo->time_to_sleep))
+		return (0);
 	print_state(philo, "is thinking");
 	return (1);
 }

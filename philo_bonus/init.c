@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 15:13:37 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:20:29 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	philo_init(t_philo *philo, int id, t_monitor *monitor)
 	philo->last_meal = get_current_time();
 }
 
-int	destroy_semaphore(t_monitor *monitor, int size)
+int	destroy_semaphores(t_monitor *monitor, int size)
 {
 	char	*sem_name;
 	int		i;
@@ -61,6 +61,7 @@ int	destroy_semaphore(t_monitor *monitor, int size)
 	ft_strlcpy(monitor->sem_name, "/    ", 6);
 	while (i < size)
 	{
+		printf("%s\n", monitor->sem_name);
 		sem_end(monitor->forks[i], monitor->sem_name);
 		i++;
 		if (i % 50 == 0)
@@ -75,19 +76,20 @@ int	init_sem(t_monitor *monitor)
 	int	i;
 	int	j;
 
-	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
-	sem_end(monitor->sem_printf, "/sem_print");
-	i = 0;
-	j = 1;
-	ft_strlcpy(monitor->sem_name, "/    ", 6);
-	while (i < 200)
-	{
-		sem_end(monitor->forks[i], monitor->sem_name);
-		i++;
-		if (i % 50 == 0)
-			j++;
-		monitor->sem_name[j]++;
-	}
+	destroy_semaphores(monitor, monitor->num_philo);
+	// sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
+	// sem_end(monitor->sem_printf, "/sem_print");
+	// i = 0;
+	// j = 1;
+	// ft_strlcpy(monitor->sem_name, "/    ", 6);
+	// while (i < 200)
+	// {
+	// 	sem_end(monitor->forks[i], monitor->sem_name);
+	// 	i++;
+	// 	if (i % 50 == 0)
+	// 		j++;
+	// 	monitor->sem_name[j]++;
+	// }
 	ft_strlcpy(monitor->sem_name, "/    ", 6);
 	monitor->sem_dead_flag = sem_open("/sem_dead_flag", O_CREAT, 0644, 1);
 	if (monitor->sem_dead_flag == SEM_FAILED)
@@ -102,7 +104,7 @@ int	init_sem(t_monitor *monitor)
 	{
 		monitor->forks[i] = sem_open(monitor->sem_name, O_CREAT, 0644, 1);
 		if (monitor->forks[i] == SEM_FAILED)
-			return (destroy_semaphore(monitor, i), 0);
+			return (destroy_semaphores(monitor, i), 0);
 		i++;
 		if (i % 50 == 0)
 			j++;
@@ -121,7 +123,6 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 	monitor->time_to_sleep = ft_atoi(argv[4]);
 	monitor->dead_flag = 0;
 	monitor->num_of_meals = -2;
-	monitor->time_start = get_current_time();
 	if (argc == 6)
 		monitor->num_of_meals = ft_atoi(argv[5]);
 	if (monitor->num_philo <= 0 || monitor->num_philo > 200
@@ -134,5 +135,6 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 	i = 0;
 	while (i++ < monitor->num_philo)
 		philo_init(&(monitor->philos[i - 1]), i, monitor);
+	monitor->time_start = get_current_time();
 	return (1);
 }

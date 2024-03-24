@@ -1,7 +1,7 @@
-leaks in kill
+//leaks in kill
 use wait_pid instead of wait
 sem_open("/sem_dead_flag", O_CREAT, 0644, 1) learn each parametrs for wath
 why use ft_usleep
-it return error when a philo died you should kill in parent process
-check if I need to destroy in child process
-don't protect in data race
+//it return error when a philo died you should kill in parent process
+//check if I need to destroy in child process
+//don't protect in data race

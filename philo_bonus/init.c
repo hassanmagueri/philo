@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 18:20:29 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:08:08 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ int	destroy_all(t_monitor *monitor)
 	ft_strlcpy(name, "/    ", 6);
 	i = 0;
 	index = 1;
-	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
 	sem_end(monitor->sem_printf, "/sem_printf");
-	while (i < 200)
+	while (i < monitor->num_philo)
 	{
 		sem_end(monitor->forks[i], name);
 		i++;
@@ -43,25 +42,21 @@ void	philo_init(t_philo *philo, int id, t_monitor *monitor)
 	philo->time_to_sleep = monitor->time_to_sleep;
 	philo->num_of_meals = monitor->num_of_meals;
 	philo->forks = monitor->forks;
-	philo->is_ate = 0;
 	philo->monitor = monitor;
 	philo->last_meal = get_current_time();
 }
 
 int	destroy_semaphores(t_monitor *monitor, int size)
 {
-	char	*sem_name;
 	int		i;
 	int		j;
 
 	j = 1;
 	i = 0;
-	sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
-	sem_end(monitor->sem_dead_flag, "/sem_print");
+	sem_end(monitor->sem_printf, "/sem_print");
 	ft_strlcpy(monitor->sem_name, "/    ", 6);
 	while (i < size)
 	{
-		printf("%s\n", monitor->sem_name);
 		sem_end(monitor->forks[i], monitor->sem_name);
 		i++;
 		if (i % 50 == 0)
@@ -77,27 +72,10 @@ int	init_sem(t_monitor *monitor)
 	int	j;
 
 	destroy_semaphores(monitor, monitor->num_philo);
-	// sem_end(monitor->sem_dead_flag, "/sem_dead_flag");
-	// sem_end(monitor->sem_printf, "/sem_print");
-	// i = 0;
-	// j = 1;
-	// ft_strlcpy(monitor->sem_name, "/    ", 6);
-	// while (i < 200)
-	// {
-	// 	sem_end(monitor->forks[i], monitor->sem_name);
-	// 	i++;
-	// 	if (i % 50 == 0)
-	// 		j++;
-	// 	monitor->sem_name[j]++;
-	// }
 	ft_strlcpy(monitor->sem_name, "/    ", 6);
-	monitor->sem_dead_flag = sem_open("/sem_dead_flag", O_CREAT, 0644, 1);
-	if (monitor->sem_dead_flag == SEM_FAILED)
-		return (sem_end(monitor->sem_philo_ready, "/sem_philo_ready"), 0);
 	monitor->sem_printf = sem_open("/sem_print", O_CREAT, 0644, 1);
 	if (monitor->sem_printf == SEM_FAILED)
-		return (sem_end(monitor->sem_philo_ready, "/sem_philo_ready"),
-			sem_end(monitor->sem_dead_flag, "/sem_dead_flag"), 0);
+		return (sem_end(monitor->sem_philo_ready, "/sem_philo_ready"), 0);
 	j = 1;
 	i = 0;
 	while (i < monitor->num_philo)
@@ -121,7 +99,6 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 	monitor->time_to_die = ft_atoi(argv[2]);
 	monitor->time_to_eat = ft_atoi(argv[3]);
 	monitor->time_to_sleep = ft_atoi(argv[4]);
-	monitor->dead_flag = 0;
 	monitor->num_of_meals = -2;
 	if (argc == 6)
 		monitor->num_of_meals = ft_atoi(argv[5]);
@@ -129,7 +106,7 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 		|| monitor->time_to_die <= 0 || monitor->time_to_eat <= 0
 		|| monitor->time_to_sleep <= 0 || monitor->num_of_meals == -1
 		|| monitor->num_of_meals == 0)
-		return (print_error());
+		return (print_error(0, NULL));
 	if (init_sem(monitor) == 0)
 		return (0);
 	i = 0;

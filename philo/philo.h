@@ -25,6 +25,7 @@ typedef struct s_monitor	t_monitor;
 
 typedef struct s_philo
 {
+	pthread_t		thread_id;
 	int				id;
 	int				num_philo;
 	int				time_to_die;
@@ -35,7 +36,6 @@ typedef struct s_philo
 	int				is_dead;
 	size_t			last_meal;
 	pthread_mutex_t	*forks;
-	pthread_t		thread_id;
 	t_monitor		*monitor;
 }	t_philo;
 
@@ -54,7 +54,6 @@ struct s_monitor
 	size_t			time_start;
 	pthread_mutex_t	mutex_philo_ready;
 	pthread_mutex_t	mutex_dead_flag;
-	pthread_mutex_t	mutex_printf;
 	pthread_mutex_t	*forks;
 };
 

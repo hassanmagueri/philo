@@ -39,29 +39,23 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				num_of_meals;
-	int				is_ate;
 	size_t			last_meal;
 	sem_t			**forks;
-	pthread_t		thread_id;
 	t_monitor		*monitor;
 }	t_philo;
 
 struct s_monitor
 {
-	pthread_t		thread_id;
 	int				num_philo;
 	int				time_to_die;
 	int				philo_ready;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				num_of_meals;
-	int				dead_flag;
-	int				threads_ready;
 	char			sem_name[6];
 	t_philo			philos[200];
 	size_t			time_start;
 	sem_t			*sem_philo_ready;
-	sem_t			*sem_dead_flag;
 	sem_t			*sem_printf;
 	sem_t			*forks[200];
 };
@@ -75,12 +69,11 @@ int		ft_philo_sleep_think(t_philo *philo);
 int		destroy_semaphores(t_monitor *monitor, int i);
 int		init_sem(t_monitor *monitor);
 int		monitor_init(t_monitor *monitor, int argc, char const *argv[]);
-int		print_error(void);
+int		print_error(int state, t_monitor *monitor);
 int		destroy_all(t_monitor *monitor);
 int		ft_philo_dead(t_philo *philo);
 void	ft_routine(t_philo *philo);
 void	print_state(t_philo *philo, char *str);
 void	philo_init(t_philo *philo, int id, t_monitor *monitor);
 size_t	get_current_time(void);
-
 #endif

@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/18 01:19:36 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:02:38 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	destroy_free_all(t_monitor *monitor)
 	i = 0;
 	pthread_mutex_destroy(&monitor->mutex_philo_ready);
 	pthread_mutex_destroy(&monitor->mutex_dead_flag);
-	pthread_mutex_destroy(&monitor->mutex_printf);
 	while (i < monitor->num_philo)
 		pthread_mutex_destroy(&monitor->forks[i++]);
 	free(monitor->forks);
@@ -49,7 +48,6 @@ int	destroy_mutex(t_monitor *monitor, int i)
 	free(monitor->philos);
 	pthread_mutex_destroy(&monitor->mutex_philo_ready);
 	pthread_mutex_destroy(&monitor->mutex_dead_flag);
-	pthread_mutex_destroy(&monitor->mutex_printf);
 	while (i--)
 		pthread_mutex_destroy(&monitor->forks[i]);
 	free(monitor->forks);
@@ -68,10 +66,6 @@ int	init_mutex(t_monitor *monitor)
 	res = pthread_mutex_init(&monitor->mutex_dead_flag, NULL);
 	if (res != 0)
 		return (pthread_mutex_destroy(&monitor->mutex_philo_ready), 0);
-	res = pthread_mutex_init(&monitor->mutex_printf, NULL);
-	if (res != 0)
-		return (pthread_mutex_destroy(&monitor->mutex_philo_ready),
-			pthread_mutex_destroy(&monitor->mutex_dead_flag), 0);
 	monitor->forks = malloc(sizeof(pthread_mutex_t) * monitor->num_philo);
 	if (!monitor->forks)
 		return (0);

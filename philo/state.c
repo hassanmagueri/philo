@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/23 15:26:48 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:01:01 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ int	print_state(t_philo *philo, char *str)
 		pthread_mutex_unlock(&monitor->mutex_dead_flag);
 		return (-1);
 	}
-	pthread_mutex_unlock(&monitor->mutex_dead_flag);
-	pthread_mutex_lock(&monitor->mutex_printf);
 	printf("%zu %d %s\n", get_current_time() - philo->monitor->time_start,
 		philo->id, str);
-	pthread_mutex_unlock(&monitor->mutex_printf);
+	pthread_mutex_unlock(&monitor->mutex_dead_flag);
 	return (1);
 }
 

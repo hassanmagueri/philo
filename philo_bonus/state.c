@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/23 15:26:59 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 15:45:40 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	print_state(t_philo *philo, char *str)
 	t_monitor	*monitor;
 
 	monitor = philo->monitor;
-	sem_wait(monitor->sem_printf);
+	if (sem_wait(monitor->sem_printf) < 0)
+		print_error(1, monitor);
 	printf("%zu\t%d\t%s\n", get_current_time() - philo->monitor->time_start,
 		philo->id, str);
-	sem_post(monitor->sem_printf);
+	if (sem_post(monitor->sem_printf) < 0)
+		print_error(1, monitor);
 }
 
 int	ft_philo_dead(t_philo *philo)
@@ -36,13 +38,12 @@ int	ft_philo_dead(t_philo *philo)
 	monitor = philo->monitor;
 	if (get_current_time() - philo->last_meal > time_die)
 	{
-		sem_post(monitor->sem_dead_flag);
-		sem_wait(monitor->sem_printf);
+		if (sem_wait(monitor->sem_printf) < 0)
+			print_error(1, monitor);
 		printf("%zu\t%d\tdied\n", get_current_time() - monitor->time_start,
 			philo->id);
-		sem_post(monitor->sem_dead_flag);
-		sem_post(monitor->forks[r_fork]);
 		sem_post(monitor->forks[l_fork]);
+		sem_post(monitor->forks[r_fork]);
 		exit(1);
 	}
 	return (0);
@@ -52,8 +53,6 @@ int	handle_one_philo(t_philo *philo)
 {
 	print_state(philo, "has taken a fork");
 	ft_usleep(NULL, philo->time_to_die);
-	sem_wait(philo->monitor->sem_dead_flag);
-	sem_post(philo->monitor->sem_dead_flag);
 	print_state(philo, "died");
 	exit (0);
 }
@@ -70,19 +69,20 @@ int	ft_eat(t_philo *philo)
 	if (philo->num_philo == 1)
 		return (handle_one_philo(philo));
 	ft_philo_dead(philo);
-	sem_wait(monitor->forks[right]);
-	if (ft_philo_dead(philo))
-		return (0);
+	if (sem_wait(monitor->forks[right]) < 0)
+		print_error(1, monitor);
+	ft_philo_dead(philo);
 	print_state(philo, "has taken a fork");
-	sem_wait(monitor->forks[left]);
-	if (ft_philo_dead(philo))
-		return (0);
+	if (sem_wait(monitor->forks[left]) < 0)
+		print_error(1, monitor);
+	ft_philo_dead(philo);
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
 	philo->last_meal = get_current_time();
 	ft_usleep(philo, philo->time_to_eat);
-	sem_post(monitor->forks[left]);
-	sem_post(monitor->forks[right]);
+	if (sem_post(monitor->forks[left]) < 0
+		|| sem_post(monitor->forks[right]) < 0)
+		print_error(1, monitor);
 	return (1);
 }
 

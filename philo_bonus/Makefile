@@ -6,7 +6,7 @@
 #    By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/18 01:46:42 by emagueri          #+#    #+#              #
-#    Updated: 2024/03/21 14:44:55 by emagueri         ###   ########.fr        #
+#    Updated: 2024/03/24 15:00:37 by emagueri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ SRC =	ft_atoi.c \
 
 OBJ		= $(SRC:.c=.o)
 
-NAME	= philo
-CC		= cc #-Wall -Werror -Wextra #-fsanitize=thread
+NAME	= philo_bonus
+CC		= cc -Wall -Werror -Wextra #-fsanitize=thread
 RM		= rm -f
 
 bonus:$(NAME)

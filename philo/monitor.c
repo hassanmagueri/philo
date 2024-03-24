@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:24 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/18 00:58:06 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:00:45 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,9 @@ int	loop_stop(t_monitor *monitor, t_philo *philo)
 	{
 		monitor->dead_flag = 1;
 		set_all_philos_dead(monitor->philos, monitor->num_philo);
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
-		usleep(10 * monitor->num_philo);
-		pthread_mutex_lock(&monitor->mutex_printf);
 		printf("%zu %d died\n",
 			get_current_time() - philo->monitor->time_start, philo->id);
-		pthread_mutex_unlock(&monitor->mutex_printf);
+		pthread_mutex_unlock(&monitor->mutex_dead_flag);
 		return (1);
 	}
 	else if (check_all_philos_ate(monitor->philos, monitor->num_philo))

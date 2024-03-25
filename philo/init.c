@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 17:17:02 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:02:22 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	destroy_mutex(t_monitor *monitor, int i)
 {
 	if (i == -1)
 		i = monitor->num_philo;
-	free(monitor->philos);
 	pthread_mutex_destroy(&monitor->mutex_philo_ready);
 	pthread_mutex_destroy(&monitor->mutex_flag);
 	while (i--)
@@ -68,7 +67,8 @@ int	init_mutex(t_monitor *monitor)
 		return (pthread_mutex_destroy(&monitor->mutex_philo_ready), 0);
 	monitor->forks = malloc(sizeof(pthread_mutex_t) * monitor->num_philo);
 	if (!monitor->forks)
-		return (0);
+		return (pthread_mutex_destroy(&monitor->mutex_philo_ready),
+				pthread_mutex_destroy(&monitor->mutex_flag), 0);
 	while (i < monitor->num_philo)
 	{
 		res = pthread_mutex_init(&monitor->forks[i], NULL);
@@ -94,8 +94,7 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 		monitor->num_of_meals = ft_atoi(argv[5]);
 	if (monitor->num_philo <= 0 || monitor->num_philo > 200
 		|| monitor->time_to_die <= 0 || monitor->time_to_eat <= 0
-		|| monitor->time_to_sleep <= 0 || monitor->num_of_meals == -1
-		|| monitor->num_of_meals == 0)
+		|| monitor->time_to_sleep <= 0 || monitor->num_of_meals == -1)
 		return (print_error());
 	if (init_mutex(monitor) == 0)
 		return (0);
@@ -105,5 +104,6 @@ int	monitor_init(t_monitor *monitor, int argc, char const *argv[])
 		return (destroy_mutex(monitor, -1));
 	while (i++ < monitor->num_philo)
 		philo_init(&(monitor->philos[i - 1]), i, monitor);
-	return (monitor->time_start = get_current_time(), 1);
+	monitor->time_start = get_current_time();
+	return (1);
 }

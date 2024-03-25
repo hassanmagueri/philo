@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/25 16:02:22 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:58:11 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	init_mutex(t_monitor *monitor)
 	monitor->forks = malloc(sizeof(pthread_mutex_t) * monitor->num_philo);
 	if (!monitor->forks)
 		return (pthread_mutex_destroy(&monitor->mutex_philo_ready),
-				pthread_mutex_destroy(&monitor->mutex_flag), 0);
+			pthread_mutex_destroy(&monitor->mutex_flag), 0);
 	while (i < monitor->num_philo)
 	{
 		res = pthread_mutex_init(&monitor->forks[i], NULL);

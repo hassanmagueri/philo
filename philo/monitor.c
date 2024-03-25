@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:24 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/25 11:37:34 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 17:21:05 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,33 +59,25 @@ int	loop_stop(t_monitor *monitor, t_philo *philo)
 	return (0);
 }
 
-int	monitor_loop(t_monitor *monitor)
-{
-	t_philo	*philo;
-	int		i;
-
-	i = 0;
-	while (i < monitor->num_philo)
-	{
-		pthread_mutex_lock(&monitor->mutex_flag);
-		philo = &monitor->philos[i];
-		if (loop_stop(monitor, philo))
-			return (0);
-		pthread_mutex_unlock(&monitor->mutex_flag);
-		i++;
-	}
-	return (1);
-}
-
 void	*ft_monitor(void *args)
 {
 	t_monitor	*monitor;
+	t_philo		*philo;
+	int			i;
 
 	monitor = (t_monitor *)args;
 	while (1)
 	{
-		if (monitor_loop(monitor) == 0)
-			return (NULL);
+		i = 0;
+		while (i < monitor->num_philo)
+		{
+			pthread_mutex_lock(&monitor->mutex_flag);
+			philo = &monitor->philos[i];
+			if (loop_stop(monitor, philo))
+				return (NULL);
+			pthread_mutex_unlock(&monitor->mutex_flag);
+			i++;
+		}
 	}
 	return (NULL);
 }

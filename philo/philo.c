@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:02 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/25 16:07:26 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:57:48 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@ void	ft_wait_all_philos(t_philo *philo)
 		pthread_mutex_lock(&philo->monitor->mutex_philo_ready);
 	}
 	pthread_mutex_unlock(&philo->monitor->mutex_philo_ready);
+}
+
+int	ft_philo_is_dead(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->monitor->mutex_flag);
+	if (philo->is_dead)
+	{
+		pthread_mutex_unlock(&philo->monitor->mutex_flag);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->monitor->mutex_flag);
+	return (0);
 }
 
 void	ft_sleep_if_even(t_philo *philo)

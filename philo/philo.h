@@ -68,6 +68,7 @@ int		init_mutex(t_monitor *monitor);
 int		monitor_init(t_monitor *monitor, int argc, char const *argv[]);
 int		print_error(void);
 int		print_state(t_philo *philo, char *str);
+int		handle_one_philo(t_philo *philo);
 
 void	*ft_routine(void *args);
 void	philo_init(t_philo *philo, int id, t_monitor *monitor);

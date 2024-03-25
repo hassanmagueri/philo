@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 17:17:16 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 17:37:04 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ int	ft_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->monitor->forks[left]);
 	if (ft_philo_dead(philo))
 		return (0);
-	print_state(philo, "has taken a fork");
+	if (print_state(philo, "has taken a fork") == -1)
+		return (0);
 	print_state(philo, "is eating");
 	philo->last_meal = get_current_time();
 	if (ft_usleep(philo, philo->time_to_eat))

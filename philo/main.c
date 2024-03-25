@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:48:18 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/18 00:54:31 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 11:13:02 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ int	print_error(void)
 {
 	write(2, "error\n", 6);
 	return (0);
-}
-
-void	leak(void)
-{
-	system("leaks a.out");
 }
 
 int	main(int argc, char const *argv[])

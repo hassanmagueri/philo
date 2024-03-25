@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:02 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 17:43:24 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:17:14 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	ft_philo_ate(t_philo *philo)
 {
 	if (philo->num_of_meals < 0)
 		return ;
-	pthread_mutex_lock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_lock(&philo->monitor->mutex_flag);
 	philo->is_ate = 1;
-	pthread_mutex_unlock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_unlock(&philo->monitor->mutex_flag);
 }
 
 void	ft_wait_all_philos(t_philo *philo)
@@ -40,13 +40,13 @@ void	ft_wait_all_philos(t_philo *philo)
 
 int	ft_philo_is_dead(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_lock(&philo->monitor->mutex_flag);
 	if (philo->is_dead)
 	{
-		pthread_mutex_unlock(&philo->monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&philo->monitor->mutex_flag);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_unlock(&philo->monitor->mutex_flag);
 	return (0);
 }
 

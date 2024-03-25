@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 17:01:01 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:17:16 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ int	print_state(t_philo *philo, char *str)
 	t_monitor	*monitor;
 
 	monitor = philo->monitor;
-	pthread_mutex_lock(&monitor->mutex_dead_flag);
+	pthread_mutex_lock(&monitor->mutex_flag);
 	if (philo->monitor->dead_flag == 1)
 	{
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&monitor->mutex_flag);
 		return (-1);
 	}
 	printf("%zu %d %s\n", get_current_time() - philo->monitor->time_start,
 		philo->id, str);
-	pthread_mutex_unlock(&monitor->mutex_dead_flag);
+	pthread_mutex_unlock(&monitor->mutex_flag);
 	return (1);
 }
 
@@ -42,10 +42,10 @@ int	ft_philo_dead(t_philo *philo)
 	monitor = philo->monitor;
 	if (get_current_time() - philo->last_meal > time_die)
 	{
-		pthread_mutex_lock(&monitor->mutex_dead_flag);
+		pthread_mutex_lock(&monitor->mutex_flag);
 		monitor->dead_flag = 1;
 		philo->is_dead = 1;
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&monitor->mutex_flag);
 		pthread_mutex_unlock(&monitor->forks[r_fork]);
 		pthread_mutex_unlock(&monitor->forks[l_fork]);
 		return (1);
@@ -57,10 +57,10 @@ int	handle_one_philo(t_philo *philo)
 {
 	print_state(philo, "has taken a fork");
 	ft_usleep(NULL, philo->time_to_die);
-	pthread_mutex_lock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_lock(&philo->monitor->mutex_flag);
 	philo->monitor->dead_flag = 1;
 	philo->is_dead = 1;
-	pthread_mutex_unlock(&philo->monitor->mutex_dead_flag);
+	pthread_mutex_unlock(&philo->monitor->mutex_flag);
 	print_state(philo, "died");
 	return (0);
 }

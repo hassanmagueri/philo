@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:24 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 17:00:45 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/25 11:37:34 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ int	loop_stop(t_monitor *monitor, t_philo *philo)
 		set_all_philos_dead(monitor->philos, monitor->num_philo);
 		printf("%zu %d died\n",
 			get_current_time() - philo->monitor->time_start, philo->id);
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&monitor->mutex_flag);
 		return (1);
 	}
 	else if (check_all_philos_ate(monitor->philos, monitor->num_philo))
 	{
 		set_all_philos_dead(monitor->philos, monitor->num_philo);
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&monitor->mutex_flag);
 		return (1);
 	}
 	return (0);
@@ -67,11 +67,11 @@ int	monitor_loop(t_monitor *monitor)
 	i = 0;
 	while (i < monitor->num_philo)
 	{
-		pthread_mutex_lock(&monitor->mutex_dead_flag);
+		pthread_mutex_lock(&monitor->mutex_flag);
 		philo = &monitor->philos[i];
 		if (loop_stop(monitor, philo))
 			return (0);
-		pthread_mutex_unlock(&monitor->mutex_dead_flag);
+		pthread_mutex_unlock(&monitor->mutex_flag);
 		i++;
 	}
 	return (1);

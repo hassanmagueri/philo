@@ -53,7 +53,7 @@ struct s_monitor
 	t_philo			*philos;
 	size_t			time_start;
 	pthread_mutex_t	mutex_philo_ready;
-	pthread_mutex_t	mutex_dead_flag;
+	pthread_mutex_t	mutex_flag;
 	pthread_mutex_t	*forks;
 };
 

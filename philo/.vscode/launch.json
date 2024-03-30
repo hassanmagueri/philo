@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/emagueri/Desktop/philos_1337/philo",
-      "program": "/Users/emagueri/Desktop/philos_1337/philo/build/Debug/outDebug"
+      "cwd": "/Users/emagueri/Desktop/philo/philo",
+      "program": "/Users/emagueri/Desktop/philo/philo/build/Debug/outDebug"
     }
   ]
 }

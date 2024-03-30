@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:48:18 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/25 16:05:00 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/30 01:59:06 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char const *argv[])
 	while (i < monitor.num_philo)
 	{
 		pthread_create(&philos[i].thread_id, NULL,
-			&ft_routine, (void *) &philos[i]);
+			ft_routine, (void *) &philos[i]);
 		i++;
 	}
 	pthread_create(&monitor.thread_id, NULL, &ft_monitor, (void *) &monitor);

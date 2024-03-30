@@ -6,11 +6,12 @@
 #    By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/18 01:46:42 by emagueri          #+#    #+#              #
-#    Updated: 2024/03/25 15:26:48 by emagueri         ###   ########.fr        #
+#    Updated: 2024/03/30 19:53:44 by emagueri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC =	ft_atoi.c \
+		ft_strncmp.c \
 		init.c \
 		main.c \
 		monitor.c \

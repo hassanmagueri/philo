@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:09 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/25 16:58:11 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/03/30 06:47:48 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	philo_init(t_philo *philo, int id, t_monitor *monitor)
 	philo->forks = monitor->forks;
 	philo->is_dead = 0;
 	philo->is_ate = 0;
+	philo->num_eat = 0;
 	philo->monitor = monitor;
 	philo->last_meal = get_current_time();
 }

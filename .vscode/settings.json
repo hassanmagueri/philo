@@ -58,6 +58,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "typeinfo": "c",
-    "__locale": "c"
+    "__locale": "c",
+    "ios": "c"
   }
 }

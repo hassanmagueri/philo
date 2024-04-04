@@ -33,6 +33,7 @@ typedef struct s_monitor	t_monitor;
 
 typedef struct s_philo
 {
+	pthread_t		pid;
 	int				id;
 	int				num_philo;
 	int				time_to_die;
@@ -41,6 +42,7 @@ typedef struct s_philo
 	int				num_of_meals;
 	size_t			last_meal;
 	sem_t			**forks;
+	sem_t			*sem;
 	t_monitor		*monitor;
 }	t_philo;
 
@@ -71,7 +73,7 @@ int		init_sem(t_monitor *monitor);
 int		monitor_init(t_monitor *monitor, int argc, char const *argv[]);
 int		print_error(int state, t_monitor *monitor);
 int		destroy_all(t_monitor *monitor);
-int		ft_philo_dead(t_philo *philo);
+void	*ft_philo_dead(void *philo);
 void	ft_routine(t_philo *philo);
 void	print_state(t_philo *philo, char *str);
 void	philo_init(t_philo *philo, int id, t_monitor *monitor);

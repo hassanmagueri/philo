@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:24 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/30 19:54:40 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:50:47 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,18 @@ int	check_all_philos_ate(t_philo *philo, int num_philo)
 
 int	loop_stop(t_monitor *monitor, t_philo *philo)
 {
-	if (check_all_philos_ate(monitor->philos, monitor->num_philo))
-	{
-		// printf("all philos eat\n");
-		set_all_philos_dead(monitor->philos, monitor->num_philo);
-		pthread_mutex_unlock(&monitor->mutex_flag);
-		return (1);
-	}
-	else if (philo->is_dead)
+	if (philo->is_dead)
 	{
 		monitor->dead_flag = 1;
 		set_all_philos_dead(monitor->philos, monitor->num_philo);
 		printf("%zu %d died\n",
 			get_current_time() - philo->monitor->time_start, philo->id);
+		pthread_mutex_unlock(&monitor->mutex_flag);
+		return (1);
+	}
+	else if (check_all_philos_ate(monitor->philos, monitor->num_philo))
+	{
+		set_all_philos_dead(monitor->philos, monitor->num_philo);
 		pthread_mutex_unlock(&monitor->mutex_flag);
 		return (1);
 	}
@@ -71,7 +70,7 @@ int	ft_philo_dead(t_philo *philo)
 	r_fork = philo->id % philo->num_philo;
 	l_fork = philo->id - 1;
 	monitor = philo->monitor;
-	if (get_current_time() - philo->last_meal >= time_die)
+	if (get_current_time() - philo->last_meal > time_die)
 	{
 		monitor->dead_flag = 1;
 		philo->is_dead = 1;
@@ -99,9 +98,7 @@ void	*ft_monitor(void *args)
 			philo = &monitor->philos[i];
 			if (loop_stop(monitor, philo))
 				return (NULL);
-			// if (check_all_philos_ate(monitor->philos, monitor->num_of_meals) && 
 			ft_philo_dead(&monitor->philos[i]);
-				// return (NULL);
 			pthread_mutex_unlock(&monitor->mutex_flag);
 			i++;
 		}

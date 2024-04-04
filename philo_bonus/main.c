@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:48:18 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 16:03:10 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/04/04 02:15:24 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	kill_child_process(t_monitor *monitor, int *pid)
 		ft_usleep(NULL, monitor->time_to_eat + monitor->time_to_sleep);
 	i = 0;
 	while (i < monitor->num_philo)
+	{
+		
 		kill(pid[i++], SIGINT);
+	}
 }
 
 int	main(int argc, char const *argv[])

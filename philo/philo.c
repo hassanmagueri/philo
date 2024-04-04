@@ -6,12 +6,11 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:02 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/30 19:54:34 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:53:45 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <string.h>
 
 void	ft_philo_ate(t_philo *philo)
 {
@@ -77,10 +76,10 @@ void	*ft_routine(void *args)
 	}
 	while (i < num_meals)
 	{
-		if (ft_eat(philo) == 0 || i + step == num_meals
-			|| ft_philo_sleep_think(philo) == 0)
+		if (ft_eat(philo) == 0 || ft_philo_sleep_think(philo) == 0
+			|| i + step == num_meals)
 			break ;
 		i += step;
 	}
-	return (ft_philo_ate(philo), NULL);
+	return (NULL);
 }

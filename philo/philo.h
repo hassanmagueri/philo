@@ -75,6 +75,6 @@ void	*ft_routine(void *args);
 void	philo_init(t_philo *philo, int id, t_monitor *monitor);
 void	*ft_monitor(void *args);
 size_t	get_current_time(void);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif

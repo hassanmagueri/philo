@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:39 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/22 16:57:39 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:57:13 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,9 @@ int	ft_usleep(t_philo *philo, size_t milliseconds)
 {
 	size_t	start;
 
+	philo = NULL;
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
-	{
-		if (philo != NULL)
-			ft_philo_dead(philo);
 		usleep(500);
-	}
 	return (0);
 }

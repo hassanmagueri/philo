@@ -6,7 +6,7 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:38:34 by emagueri          #+#    #+#             */
-/*   Updated: 2024/03/24 15:45:40 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:57:02 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,6 @@ void	print_state(t_philo *philo, char *str)
 		philo->id, str);
 	if (sem_post(monitor->sem_printf) < 0)
 		print_error(1, monitor);
-}
-
-int	ft_philo_dead(t_philo *philo)
-{
-	t_monitor	*monitor;
-	int			r_fork;
-	int			l_fork;
-	size_t		time_die;
-
-	time_die = (unsigned long)philo->time_to_die;
-	r_fork = philo->id - 1;
-	l_fork = philo->id % philo->num_philo;
-	monitor = philo->monitor;
-	if (get_current_time() - philo->last_meal > time_die)
-	{
-		if (sem_wait(monitor->sem_printf) < 0)
-			print_error(1, monitor);
-		printf("%zu\t%d\tdied\n", get_current_time() - monitor->time_start,
-			philo->id);
-		sem_post(monitor->forks[l_fork]);
-		sem_post(monitor->forks[r_fork]);
-		exit(1);
-	}
-	return (0);
 }
 
 int	handle_one_philo(t_philo *philo)
@@ -68,17 +44,17 @@ int	ft_eat(t_philo *philo)
 	monitor = philo->monitor;
 	if (philo->num_philo == 1)
 		return (handle_one_philo(philo));
-	ft_philo_dead(philo);
 	if (sem_wait(monitor->forks[right]) < 0)
 		print_error(1, monitor);
-	ft_philo_dead(philo);
 	print_state(philo, "has taken a fork");
 	if (sem_wait(monitor->forks[left]) < 0)
 		print_error(1, monitor);
-	ft_philo_dead(philo);
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
+	if (sem_wait(monitor->sem_printf) < 0)
+		print_error(1, monitor);
 	philo->last_meal = get_current_time();
+	sem_post(monitor->sem_printf);
 	ft_usleep(philo, philo->time_to_eat);
 	if (sem_post(monitor->forks[left]) < 0
 		|| sem_post(monitor->forks[right]) < 0)
